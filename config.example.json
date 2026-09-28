@@ -1,0 +1,18 @@
+{
+  "repos": [
+    { "owner": "your-org", "name": "your-repo", "localPath": "~/Dev/your-repo" },
+    { "owner": "your-org", "name": "another-repo" }
+  ],
+  "linear": {
+    "teamKey": "ENG",
+    "inProgressStatusName": "In Progress"
+  },
+  "refreshIntervalSeconds": 300,
+  "wipLabel": "wip",
+  "hotspotThreshold": 10,
+  "terminals": {
+    "enabled": false,
+    "worktreeRoot": "~/.pitwall/worktrees",
+    "command": ["claude"]
+  }
+}

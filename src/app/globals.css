@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  /*
+   * Keep the vertical scrollbar's width reserved at all times.
+   *
+   * Without this, switching tabs moves the whole page sideways: the Cockpit is
+   * tall enough to need a scrollbar and Team Pulse often isn't, so the scrollbar
+   * disappears, 10px of width returns, and `mx-auto` re-centres everything 5px
+   * over. The title visibly jumps.
+   *
+   * It only shows up on a viewport wide enough for the container to be centred
+   * *and* tall enough for the shorter tab to fit — i.e. a large portrait
+   * monitor, which is why it isn't visible in a default-sized window.
+   *
+   * `overflow-y: scroll` rather than `scrollbar-gutter: stable`: the latter
+   * computes correctly here and still reserves nothing, verified in the browser.
+   * This costs nothing visually because the track below is painted the same
+   * colour as the page, so an unused one is invisible.
+   */
+  overflow-y: scroll;
+}
+
+html,
+body {
+  background-color: #0b0d10;
+  color: #e6e9ee;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0d10;
+}
+::-webkit-scrollbar-thumb {
+  background: #222831;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2c333d;
+}
+
+/*
+ * The repo dropdown, styled for real.
+ *
+ * A native <select>'s option list is drawn by the OS, so it ignores the page
+ * entirely — on macOS that meant a white-on-blue system popup in the middle of a
+ * dark dashboard. `appearance: base-select` opts into Chrome's customisable
+ * select, which renders the picker in-page and exposes it to CSS while keeping
+ * the real element: keyboard navigation, typeahead, form semantics and screen
+ * reader behaviour are all still the browser's, not ours.
+ *
+ * The alternative was a hand-built listbox — a button, a rendered list, and then
+ * owning focus management, arrow keys, typeahead, click-outside and the ARIA
+ * roles to match. That is a lot of surface to get subtly wrong for a styling
+ * change.
+ *
+ * Everything here is inside `@supports`, so a browser without the API simply
+ * gets the native control it always had. Nothing degrades; it just isn't themed.
+ */
+@supports (appearance: base-select) {
+  select.pitwall-select,
+  select.pitwall-select::picker(select) {
+    appearance: base-select;
+  }
+
+  select.pitwall-select::picker(select) {
+    background-color: #13171c;      /* bg-panel */
+    border: 1px solid #222831;      /* line */
+    border-radius: 0.375rem;
+    padding: 0.25rem;
+    /* Long repo lists shouldn't run off the viewport. */
+    max-height: 60vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.5);
+  }
+
+  select.pitwall-select option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: #e6e9ee;                 /* text-primary */
+    background-color: transparent;
+  }
+
+  /* Hover and keyboard focus get the same treatment: navigating by arrow key
+     should look like pointing at a row, not like a second, different state. */
+  select.pitwall-select option:hover,
+  select.pitwall-select option:focus {
+    background-color: #181d23;      /* bg-row */
+    outline: none;
+  }
+
+  select.pitwall-select option:checked {
+    color: #58a6ff;                 /* accent-blue */
+  }
+
+  /* The tick sits in a fixed column so the names line up whether or not a row
+     is the selected one — a checkmark that shifts its row reads as a jump. */
+  select.pitwall-select option::checkmark {
+    content: "✓";
+    width: 1rem;
+    color: #58a6ff;                 /* accent-blue */
+  }
+  select.pitwall-select option:not(:checked)::checkmark {
+    color: transparent;
+  }
+
+  select.pitwall-select::picker-icon {
+    color: #8a93a0;                 /* text-muted */
+    transition: transform 0.15s ease;
+  }
+  select.pitwall-select:open::picker-icon {
+    transform: rotate(180deg);
+  }
+}

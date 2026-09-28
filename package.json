@@ -1,0 +1,54 @@
+{
+  "name": "pitwall",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An at-a-glance dashboard for GitHub PRs and Linear tickets — your work and the team's, on one screen.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShipAngel/pitwall.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "next dev -H 127.0.0.1 -p 3737",
+    "term": "tsx term-server/index.ts",
+    "postinstall": "node scripts/fix-node-pty-permissions.mjs",
+    "build": "next build",
+    "start": "next start -H 127.0.0.1 -p 3737",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "next": "^16.3.3",
+    "node-pty": "^1.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "swr": "^2.2.5",
+    "ws": "^8.21.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/react": "18.3.28",
+    "@types/react-dom": "18.3.7",
+    "@types/ws": "^8.18.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.2.11",
+    "postcss": "^8.5.23",
+    "tailwindcss": "^3.4.16",
+    "tsx": "^4.23.8",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "postcss": "^8.5.23",
+    "sharp": "^0.35.0",
+    "minimatch": "^10.2.5"
+  }
+}

@@ -1,0 +1,34 @@
+node_modules
+.next
+out
+dist
+coverage
+
+.env
+.env.local
+.env*.local
+
+# user's local config (committed example: config.example.json)
+config.json
+
+# terminal sidecar's per-boot port + token
+.pitwall-terminal.json
+
+*.tsbuildinfo
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# test/dev artifacts
+.playwright-mcp
+*.png
+!public/**/*.png
+!docs/screenshots/*.png
+
+next-env.d.ts
+
+# internal notes kept out of the public repo
+CLAUDE.local.md
+.claude/settings.local.json

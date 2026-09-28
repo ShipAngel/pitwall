@@ -1,0 +1,13 @@
+<!--
+  The same tyre as the header mark (src/components/WheelMark.tsx), so the tab
+  icon and the wordmark are one symbol rather than two competing ones. Geometry
+  is scaled from that 32x32 viewBox to 64x64, and the colours are literal
+  because a favicon has no stylesheet to inherit from.
+
+  If the header mark changes, change this too — they can only drift apart.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#0b0d10"/>
+  <circle cx="32" cy="32" r="23" fill="none" stroke="#f85149" stroke-width="9"/>
+  <circle cx="32" cy="32" r="9.5" fill="none" stroke="#e6e9ee" stroke-width="4.5"/>
+</svg>
