@@ -79,7 +79,7 @@ their own machine, and it stays on `localhost` (see [Security](#security)).
 ```sh
 git clone https://github.com/ShipAngel/pitwall.git
 cd pitwall
-npm install
+npm install --no-save
 ```
 
 ### 2. Add your tokens
