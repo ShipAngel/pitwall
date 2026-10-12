@@ -69,14 +69,32 @@ back to the last release predating each advisory. Run once, it took findings fro
 Upgrade forward instead: `npm outdated`, then `npm install <pkg>@<version>`, then
 re-audit and run the full gate.
 
-`npm audit` reports **0 vulnerabilities**. Keep it there.
+`npm audit --omit=dev` reports **0 vulnerabilities**. Keep it there. Plain
+`npm audit` also reports two dev-tooling advisories with no fix this repo can
+take, and those two are the only accepted findings - anything else is new:
+
+- `braces` [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
+  has no patched release at all. Tailwind 3 reaches it through both `chokidar`
+  and `micromatch`, `eslint-config-next` through `micromatch`; each package on
+  those paths is reported separately, which is why one advisory shows up as
+  several highs.
+- `postcss-selector-parser` [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf)
+  is fixed only in 7.x, and Tailwind 3 requires `^6`. Don't override it to 7: the
+  7.0 major changed insertion during iteration, which Tailwind's variant
+  formatting relies on, and nothing here would notice the CSS changing.
+
+Both are denial-of-service bugs reachable only by handing the build a hostile
+pattern. Tailwind 3 is on its last release, so clearing them means moving to
+Tailwind 4.
 
 `package.json` carries three `overrides` (`postcss`, `sharp`, `minimatch`) because
 `next` and eslint pin vulnerable versions internally with no forward fix of their
 own. Verify any change to them with a real build and boot, not just `npm audit`.
+A vulnerable leaf whose patched version is already inside its consumer's range
+needs no override, only `npm update <pkg>` to move the lockfile.
 
 The `minimatch` override is load-bearing: it is what keeps `brace-expansion` on
-the patched `5.0.8`. Override the **consumer**, never the leaf — forcing
+a patched 5.x. Override the **consumer**, never the leaf — forcing
 `brace-expansion@5` directly throws `expand is not a function` on every lint run,
 because `minimatch@3` calls it as a function.
 
