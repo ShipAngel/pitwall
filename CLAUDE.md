@@ -74,10 +74,12 @@ re-audit and run the full gate.
 take, and those two are the only accepted findings - anything else is new:
 
 - `braces` [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
-  has no patched release at all. Tailwind 3 reaches it through both `chokidar`
-  and `micromatch`, `eslint-config-next` through `micromatch`; each package on
-  those paths is reported separately, which is why one advisory shows up as
-  several highs.
+  has no patched release of `braces` itself. Tailwind 3 reaches it through both
+  `chokidar` and `micromatch`, `eslint-config-next` through `micromatch`; each
+  package on those paths is reported separately, which is why one advisory shows
+  up as several highs. `npm audit` does list a "fix" for each: a Tailwind major,
+  and for the eslint chain the `eslint-config-next` downgrade described above.
+  Neither is one to take.
 - `postcss-selector-parser` [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf)
   is fixed only in 7.x, and Tailwind 3 requires `^6`. Don't override it to 7: the
   7.0 major changed insertion during iteration, which Tailwind's variant
@@ -93,8 +95,17 @@ own. Verify any change to them with a real build and boot, not just `npm audit`.
 A vulnerable leaf whose patched version is already inside its consumer's range
 needs no override, only `npm update <pkg>` to move the lockfile.
 
+The `sharp` override's floor, `0.35.5`, is the release that patched a librsvg
+CVE while `next` still accepted `0.35.4`. It can go once `next`'s own range
+starts at `0.35.5` or later.
+
+The lockfile is written by npm 11. npm 10 strips the `libc` constraints on the
+Linux builds of `next`'s SWC binary and `sharp`, so a lockfile touched with npm
+10 shows a large unexplained diff and installs both glibc and musl binaries on
+Linux. Check `npm -v` before committing it.
+
 The `minimatch` override is load-bearing: it is what keeps `brace-expansion` on
-a patched 5.x. Override the **consumer**, never the leaf — forcing
+`5.0.8` or later, the first patched release. Override the **consumer**, never the leaf — forcing
 `brace-expansion@5` directly throws `expand is not a function` on every lint run,
 because `minimatch@3` calls it as a function.
 

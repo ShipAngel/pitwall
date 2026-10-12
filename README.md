@@ -378,7 +378,7 @@ can't fix yet; `CLAUDE.md` names them.
 **Don't run `npm audit fix`:** here it proposes downgrading `next` from 16 to
 9.3.3. Upgrade forward instead with `npm outdated` and `npm install <pkg>@<version>`,
 then rerun the checks. The three `overrides` in `package.json` exist because `next`
-and ESLint pin vulnerable versions internally; `CLAUDE.md` explains why.
+and ESLint pin vulnerable versions internally; `CLAUDE.md` explains each.
 
 **Never commit `.env.local` or `config.json`.** Adding a setting means updating
 `config.example.json`, `validateConfig` in `src/lib/config.ts`, and the table above.
