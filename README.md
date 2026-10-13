@@ -79,7 +79,7 @@ their own machine, and it stays on `localhost` (see [Security](#security)).
 ```sh
 git clone https://github.com/ShipAngel/pitwall.git
 cd pitwall
-npm install
+npm install --no-save
 ```
 
 ### 2. Add your tokens
@@ -372,7 +372,9 @@ components and tested directly, and nothing touches the network.
 hit and the reason behind each guard. Read the relevant part before changing that
 area. [`CONTRIBUTING.md`](./CONTRIBUTING.md) covers the rest.
 
-**Dependencies.** `npm audit` reports zero vulnerabilities; keep it that way.
+**Dependencies.** `npm audit --omit=dev` reports zero vulnerabilities; keep it
+that way. Plain `npm audit` also shows two dev-tooling advisories that this repo
+can't fix yet; `CLAUDE.md` names them.
 **Don't run `npm audit fix`:** here it proposes downgrading `next` from 16 to
 9.3.3. Upgrade forward instead with `npm outdated` and `npm install <pkg>@<version>`,
 then rerun the checks. The three `overrides` in `package.json` exist because `next`
