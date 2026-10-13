@@ -59,7 +59,7 @@ export default function TerminalDock({
           return (
             <div
               key={t.key}
-              className={`flex shrink-0 items-center gap-1 rounded border px-2 py-1 text-xs transition ${
+              className={`flex shrink-0 items-center gap-1 rounded-sm border px-2 py-1 text-xs transition ${
                 isActive
                   ? "border-accent-blue/40 bg-accent-blue/15 text-accent-blue"
                   : "border-line bg-bg-panel text-text-muted hover:text-text-primary"
@@ -78,7 +78,7 @@ export default function TerminalDock({
                 onClick={() => onClose(t.key)}
                 aria-label={`Detach terminal for ${t.repo}#${t.prNumber}`}
                 title="Detach (the tmux session keeps running)"
-                className="rounded px-0.5 text-text-dim transition hover:bg-bg-row hover:text-accent-red"
+                className="rounded-sm px-0.5 text-text-dim transition hover:bg-bg-row hover:text-accent-red"
               >
                 ×
               </button>

@@ -68,7 +68,7 @@ export default function StartWorkCard({
           aria-invalid={badTicket}
           aria-describedby={badTicket ? TICKET_ERROR_ID : undefined}
           spellCheck={false}
-          className="w-40 rounded border border-line bg-bg-row px-2 py-1.5 text-sm text-text-primary placeholder:text-text-dim focus:border-accent-blue focus:outline-none"
+          className="w-40 rounded-sm border border-line bg-bg-row px-2 py-1.5 text-sm text-text-primary placeholder:text-text-dim focus:border-accent-blue focus:outline-hidden"
         />
         <select
           value={repo}
@@ -80,7 +80,7 @@ export default function StartWorkCard({
           // where a ticket id is always about eight characters. `min-w-0` because
           // a flex item won't shrink below its content otherwise, which would
           // push the button out of the card on a narrow window.
-          className="pitwall-select min-w-0 flex-1 rounded border border-line bg-bg-row px-2 py-1.5 text-sm text-text-primary focus:border-accent-blue focus:outline-none"
+          className="pitwall-select min-w-0 flex-1 rounded-sm border border-line bg-bg-row px-2 py-1.5 text-sm text-text-primary focus:border-accent-blue focus:outline-hidden"
         >
           {repos.map((r) => {
             const slug = `${r.owner}/${r.name}`;
@@ -94,7 +94,7 @@ export default function StartWorkCard({
         <button
           type="submit"
           disabled={!canSubmit}
-          className="rounded border border-accent-blue/40 bg-accent-blue/15 px-3 py-1.5 text-sm font-medium text-accent-blue transition hover:bg-accent-blue/25 disabled:cursor-not-allowed disabled:border-line disabled:bg-bg-row disabled:text-text-dim"
+          className="rounded-sm border border-accent-blue/40 bg-accent-blue/15 px-3 py-1.5 text-sm font-medium text-accent-blue transition hover:bg-accent-blue/25 disabled:cursor-not-allowed disabled:border-line disabled:bg-bg-row disabled:text-text-dim"
         >
           {pending ? "Starting…" : "Start work"}
         </button>
@@ -119,14 +119,14 @@ function Result({ result }: { result: ReturnType<typeof useStartWork>["result"] 
 
   if (!result.started) {
     return (
-      <p className="mt-4 rounded border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
+      <p className="mt-4 rounded-sm border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
         {result.error ?? "Nothing was started."}
       </p>
     );
   }
 
   return (
-    <div className="mt-4 rounded border border-accent-green/30 bg-accent-green/10 p-3 text-sm">
+    <div className="mt-4 rounded-sm border border-accent-green/30 bg-accent-green/10 p-3 text-sm">
       <p className="text-accent-green">
         {startWorkSummary(result)}
         {result.pr && (

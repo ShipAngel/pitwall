@@ -53,14 +53,14 @@ export default function SessionsSection({
       <h2 className="mb-4 text-base font-semibold">Claude Code Sessions</h2>
 
       {error && (
-        <p className="rounded border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
+        <p className="rounded-sm border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
           {error}
         </p>
       )}
       {!error && !data && (
         <div className="space-y-2">
           {[0, 1].map((i) => (
-            <div key={i} className="h-8 animate-pulse rounded bg-bg-row" />
+            <div key={i} className="h-8 animate-pulse rounded-sm bg-bg-row" />
           ))}
         </div>
       )}

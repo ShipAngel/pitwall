@@ -36,7 +36,7 @@ export default function TicketRefs({
     <span className="flex shrink-0 items-center gap-1" title={ids.join("\n")}>
       {shown.map((id) => {
         const href = linearIssueUrl(orgUrlKey, id);
-        const cls = "inline-flex items-center rounded border border-accent-blue/30 bg-accent-blue/15 px-1.5 py-0.5 font-mono text-xs font-medium text-accent-blue";
+        const cls = "inline-flex items-center rounded-sm border border-accent-blue/30 bg-accent-blue/15 px-1.5 py-0.5 font-mono text-xs font-medium text-accent-blue";
         return href ? (
           <a key={id} href={href} target="_blank" rel="noreferrer"
             className={`${cls} hover:bg-accent-blue/25 hover:underline`}>

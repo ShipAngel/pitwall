@@ -22,7 +22,7 @@ export default function TerminalButton({
       onClick={() => onOpen(pr)}
       aria-label={`Open terminal for ${pr.repo}#${pr.number}`}
       title={`Open a terminal on ${pr.headRefName}`}
-      className="shrink-0 rounded p-0.5 text-text-muted transition hover:bg-bg-row hover:text-accent-green"
+      className="shrink-0 rounded-sm p-0.5 text-text-muted transition hover:bg-bg-row hover:text-accent-green"
     >
       <svg
         aria-hidden="true"

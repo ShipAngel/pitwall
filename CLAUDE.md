@@ -70,24 +70,35 @@ Upgrade forward instead: `npm outdated`, then `npm install <pkg>@<version>`, the
 re-audit and run the full gate.
 
 `npm audit --omit=dev` reports **0 vulnerabilities**. Keep it there. Plain
-`npm audit` also reports two dev-tooling advisories with no fix this repo can
-take, and those two are the only accepted findings - anything else is new:
+`npm audit` also reports one dev-tooling advisory with no fix this repo can take,
+and it is the only accepted finding - anything else is new:
 
 - `braces` [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
-  has no patched release of `braces` itself. Tailwind 3 reaches it through both
-  `chokidar` and `micromatch`, `eslint-config-next` through `micromatch`; each
-  package on those paths is reported separately, which is why one advisory shows
-  up as several highs. `npm audit` does list a "fix" for each: a Tailwind major,
-  and for the eslint chain the `eslint-config-next` downgrade described above.
-  Neither is one to take.
-- `postcss-selector-parser` [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf)
-  is fixed only in 7.x, and Tailwind 3 requires `^6`. Don't override it to 7: the
-  7.0 major changed insertion during iteration, which Tailwind's variant
-  formatting relies on, and nothing here would notice the CSS changing.
+  has no patched release of `braces` itself. It arrives only through
+  `eslint-config-next` → `@next/eslint-plugin-next` → `fast-glob` →
+  `micromatch`; each package on that path is reported separately, which is why
+  one advisory shows up as several highs. `npm audit` lists a "fix" for it: a
+  major downgrade of `eslint-config-next` (to 14.2.35 when written), the same
+  trap as above. Don't take it. It is a
+  denial-of-service bug reachable only by handing lint a hostile glob pattern.
 
-Both are denial-of-service bugs reachable only by handing the build a hostile
-pattern. Tailwind 3 is on its last release, so clearing them means moving to
-Tailwind 4.
+Tailwind is on v4, which dropped the `chokidar`, `micromatch` and
+`postcss-selector-parser` paths v3 carried.
+
+**Tailwind 4 renders the same as v3 did.** Checked by screenshotting both builds
+side by side on both tabs, as they render with live data, and diffing pixels:
+zero differences. Hover, focus, disabled, loading, error and the terminal dock
+were not screenshotted. That held only after restoring v3 behaviour v4 changed,
+all at the top of `globals.css`: in `@layer base`, border colour, placeholder
+colour, the button pointer cursor, and the browser's 1px `th`/`td` padding (v4
+zeroes all padding, which shrank the Team Pulse table's header by 1px and moved
+its columns); outside it, `hover:` applying on every device, v3's `transition`
+property list, and class scanning limited to `src/`. Remove one only after giving
+every element that relies on it an explicit utility, and re-diff.
+
+Theme colours and fonts live in the `@theme` block in `globals.css`; there is no
+`tailwind.config.ts` any more. `rounded` in v3 is `rounded-sm` in v4, and
+`outline-none` is `outline-hidden` - write the v4 names.
 
 `package.json` carries three `overrides` (`postcss`, `sharp`, `minimatch`) because
 `next` and eslint pin vulnerable versions internally with no forward fix of their

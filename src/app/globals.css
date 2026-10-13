@@ -1,6 +1,100 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+ * Scan only src/ for class names, as v3's `content` setting did. v4 would
+ * otherwise scan the whole repo, so words like `hidden` in the markdown generate
+ * unused CSS, and editing CLAUDE.md rebuilds CSS on the running dev server.
+ */
+@import 'tailwindcss' source(none);
+@source '../';
+
+/* v3's hover applied everywhere; v4 limits it to devices that can hover. */
+@custom-variant hover (&:hover);
+
+/*
+ * v3's `transition` property list. v4's also animates outline-color, so a
+ * keyboard focus ring would fade in where v3 showed it at once. A plain rule in
+ * the utilities layer, not `@utility`: `@utility transition` merges into the
+ * built-in one and the built-in property list still wins. This comes later in
+ * the same layer at the same specificity, so it overrides.
+ */
+@layer utilities {
+  .transition {
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke, opacity, box-shadow, transform,
+      filter, backdrop-filter;
+  }
+}
+
+@theme {
+  --color-bg-base: #0b0d10;
+  --color-bg-panel: #13171c;
+  --color-bg-row: #181d23;
+
+  --color-line: #222831;
+
+  --color-text-primary: #e6e9ee;
+  --color-text-muted: #8a93a0;
+  --color-text-dim: #5b6470;
+
+  --color-accent-green: #3fb950;
+  --color-accent-yellow: #d29922;
+  --color-accent-orange: #db6d28;
+  --color-accent-red: #f85149;
+  --color-accent-blue: #58a6ff;
+  --color-accent-purple: #a371f7;
+
+  --font-sans: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/*
+ * Tailwind 3 defaults that Tailwind 4's preflight changed, kept so the move to
+ * v4 renders pixel-identically.
+ *
+ * - Border colour: v4 defaults to `currentcolor`; v3 used gray-200. The value is
+ *   v3's hex, not `--color-gray-200`, because v4's gray-200 is an oklch colour
+ *   that doesn't land on exactly the same pixel.
+ * - Placeholder: v4 uses the text colour at 50%; v3 used gray-400.
+ * - Buttons: v4 gives them the default cursor; v3 gave them a pointer.
+ * - Table cells: v4 zeroes every element's padding, v3 left the browser's 1px
+ *   on `th`/`td`. Without it the Team Pulse table's header row is 1px shorter
+ *   and its columns shift by a few pixels.
+ *
+ * Dropping any of these means giving each element that relies on it an
+ * explicit utility first.
+ */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #e5e7eb;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    opacity: 1;
+    color: #9ca3af;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  th,
+  td {
+    padding: 1px;
+  }
+
+  /* Layered so the `bg-*`/`text-*` classes on <body> still win, as they did in
+     v3; unlayered CSS beats every utility in v4. */
+  html,
+  body {
+    background-color: #0b0d10;
+    color: #e6e9ee;
+  }
+}
 
 html {
   /*
@@ -21,12 +115,6 @@ html {
    * colour as the page, so an unused one is invisible.
    */
   overflow-y: scroll;
-}
-
-html,
-body {
-  background-color: #0b0d10;
-  color: #e6e9ee;
 }
 
 ::-webkit-scrollbar {

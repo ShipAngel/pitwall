@@ -38,14 +38,14 @@ export default function ReviewRequestsSection({
       </div>
 
       {githubError && (
-        <p className="rounded border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
+        <p className="rounded-sm border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
           {githubError}
         </p>
       )}
       {!githubError && !github && (
         <div className="space-y-2">
           {[0, 1, 2].map((i) => (
-            <div key={i} className="h-8 animate-pulse rounded bg-bg-row" />
+            <div key={i} className="h-8 animate-pulse rounded-sm bg-bg-row" />
           ))}
         </div>
       )}

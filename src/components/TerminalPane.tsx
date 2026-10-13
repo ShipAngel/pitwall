@@ -54,7 +54,7 @@ export default function TerminalPane({
             <button
               type="button"
               onClick={reconnect}
-              className="rounded border border-line px-2 py-0.5 text-text-primary transition hover:bg-bg-row"
+              className="rounded-sm border border-line px-2 py-0.5 text-text-primary transition hover:bg-bg-row"
             >
               {status === "ended" ? "Start again" : "Reconnect"}
             </button>
