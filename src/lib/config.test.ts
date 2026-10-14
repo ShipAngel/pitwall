@@ -59,6 +59,13 @@ describe("validateConfig", () => {
     ).toThrow(/refreshIntervalSeconds/);
   });
 
+  it("defaults a missing refresh interval to 300 seconds", () => {
+    const config: Record<string, unknown> = { ...valid };
+    delete config.refreshIntervalSeconds;
+    expect(validateConfig(config).refreshIntervalSeconds).toBe(300);
+    expect(validateConfig(valid).refreshIntervalSeconds).toBe(valid.refreshIntervalSeconds);
+  });
+
   it("accepts a custom wipLabel", () => {
     expect(() =>
       validateConfig({ ...valid, wipLabel: "in-progress" }),

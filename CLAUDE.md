@@ -58,6 +58,9 @@ likewise. The sidecar itself re-reads `config.json` per connection.
 Both are gitignored with committed `.example` counterparts. Never commit either.
 Adding a setting means updating `config.example.json`, `validateConfig`, and the
 README reference table.
+Give a new setting a default. Existing users' `config.json` never gains it, and
+`start.sh` only warns about the keys with none (`repos`, `linear`). A new
+required key also has to go into that list in `start.sh`.
 
 ## Dependencies
 

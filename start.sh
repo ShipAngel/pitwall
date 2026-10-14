@@ -38,30 +38,29 @@ if [ ! -f config.json ]; then
   cp config.example.json config.json
 fi
 
-# A commit that adds a config key updates config.example.json, but your own
-# config.json is gitignored and stays as it was. Nothing fails loudly — the
-# feature it gates is just silently off — so name the gap rather than leaving it
-# looking like a bug in the new code.
+# Only the settings with no default are named: the ones you have to fill in
+# yourself. Every other setting works when absent, so a commit that adds one to
+# config.example.json changes nothing for you, and warning about it would read
+# as something broken. Copying them into your config.json was the other option,
+# but that would pin today's defaults there, and a later change to a default
+# would never reach you.
 #
-# Top-level keys only, deliberately. A new feature arrives as a new block, which
-# this catches; the keys *inside* one are optional settings with defaults, and
-# listing those would nag about every default you had been happy with.
+# Keep this list in step with what validateConfig requires.
 if ! MISSING_KEYS="$(node -e "
-  const example = require('./config.example.json');
   const mine = require('./config.json');
-  process.stdout.write(Object.keys(example).filter((k) => !(k in mine)).join(', '));
+  const required = ['repos', 'linear'];
+  process.stdout.write(required.filter((k) => !Object.hasOwn(mine, k)).join(', '));
 " 2>/dev/null)"; then
   # Reported rather than swallowed: a failed comparison and a clean one both
   # leave MISSING_KEYS empty, and a silent all-clear from a check that never ran
   # is worse than no check at all. Still non-fatal — this shouldn't stop a boot.
-  echo "⚠  Couldn't compare config.json against the example — is it valid JSON?"
+  echo "⚠  Couldn't read config.json - is it valid JSON?"
   MISSING_KEYS=""
 fi
 if [ -n "$MISSING_KEYS" ]; then
   echo "⚠  config.json is missing: ${MISSING_KEYS}"
-  echo "   Present in config.example.json - added by a newer commit."
-  echo "   Each has a default, or gates a feature that stays off without it;"
-  echo "   copy them across to turn them on or change them."
+  echo "   These have no default. Copy them from config.example.json and fill in"
+  echo "   your own values; the dashboard shows an error until you do."
 fi
 
 # The mirror image: a commit that *removes* a setting can't touch your gitignored

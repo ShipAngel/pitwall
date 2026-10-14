@@ -156,8 +156,9 @@ picks up changes. Every setting is listed under [Configuration](#configuration).
 Then open **http://localhost:3737**.
 
 `start.sh` checks your Node version, syncs dependencies, creates `.env.local` and
-`config.json` from the examples if they're missing, warns about config keys
-you're missing or no longer need, and starts the server. It also starts the
+`config.json` from the examples if they're missing, warns if `repos` or
+`linear` is missing or a key is no longer used, and starts the server. Settings
+added by newer commits all have defaults, so there is nothing to copy across. It also starts the
 terminal server when terminals are turned on. `./start.sh prod` serves a
 production build instead.
 
@@ -230,7 +231,7 @@ Bad values fail loudly and name the setting.
 | `repos[].localPath` | no | Your clone of that repo (`~` allowed). Only used by [per-PR terminals](#per-pr-terminals). |
 | `linear.teamKey` | yes | Your Linear team's ticket prefix: `ENG` for `ENG-123`. |
 | `linear.inProgressStatusName` | no | The status Start Work moves a ticket to. Defaults to `In Progress`. |
-| `refreshIntervalSeconds` | yes | How often panels refresh. `300` is sensible; very short intervals eat into Linear's hourly rate limit. |
+| `refreshIntervalSeconds` | no | How often panels refresh. Defaults to `300`; very short intervals eat into Linear's hourly rate limit. |
 | `wipLabel` | no | The PR label that means work in progress. Defaults to `wip`, any case. |
 | `hotspotThreshold` | no | Team Pulse counts at or above this turn red. Defaults to `10`; raise it for a bigger team. |
 | `terminals.enabled` | no | Turns on per-PR terminals. Off by default. |
