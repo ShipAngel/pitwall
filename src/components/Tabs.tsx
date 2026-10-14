@@ -43,7 +43,7 @@ export default function Tabs({
             title={t.hint}
             onClick={() => onChange(t.id)}
             onKeyDown={onKeyDown}
-            className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium transition ${
+            className={`-mb-px border-b-2 px-4 py-2 text-sm font-medium transition-ui ${
               selected
                 ? "border-accent-blue text-text-primary"
                 : "border-transparent text-text-muted hover:border-line hover:text-text-primary"

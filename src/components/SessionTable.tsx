@@ -35,7 +35,7 @@ export default function SessionTable({ sessions }: { sessions: ClaudeSession[] }
                 ? `Bring ${s.tty} to the front${s.cwd ? ` — ${s.path}` : ""}`
                 : `${s.tty} isn't an iTerm2 window, so it can't be focused`
             }
-            className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-sm transition hover:bg-bg-row disabled:cursor-default disabled:opacity-60 disabled:hover:bg-transparent"
+            className="flex w-full items-center gap-2 rounded-sm px-1.5 py-1 text-left text-sm transition-ui hover:bg-bg-row disabled:cursor-default disabled:opacity-60 disabled:hover:bg-transparent"
           >
             <span
               aria-hidden

@@ -161,7 +161,7 @@ function StatusCard({
       // existing view by workflow state. The title says so rather than letting
       // the destination imply a filter that isn't applied.
       title={`${status.name}: ${formatFlowCount(status.count, status.truncated)} tickets${showPoints ? `, ${status.points} points` : ""} - opens the team's active view in Linear`}
-      className="block rounded-md border border-line bg-bg-row p-4 transition hover:border-accent-blue/50"
+      className="block rounded-md border border-line bg-bg-row p-4 transition-ui hover:border-accent-blue/50"
     >
       <div className="flex items-center gap-1.5">
         <span
@@ -213,7 +213,7 @@ function Panel({
 
 function ErrorMsg({ msg }: { msg: string }) {
   return (
-    <p className="rounded border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
+    <p className="rounded-sm border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
       {msg}
     </p>
   );
@@ -223,7 +223,7 @@ function Skeleton() {
   return (
     <div className="space-y-2">
       {[0, 1, 2].map((i) => (
-        <div key={i} className="h-8 animate-pulse rounded bg-bg-row" />
+        <div key={i} className="h-8 animate-pulse rounded-sm bg-bg-row" />
       ))}
     </div>
   );

@@ -25,7 +25,7 @@ export default function Badge({
       // shrink-0 and whitespace-nowrap because a badge is a fixed label, not
       // prose: inside a flex row it would otherwise compress or wrap its text
       // when it shares the space, turning "checks cancelled" into two lines.
-      className={`inline-flex shrink-0 items-center whitespace-nowrap rounded border px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide ${COLOR[kind]}`}
+      className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-sm border px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide ${COLOR[kind]}`}
     >
       {children}
     </span>

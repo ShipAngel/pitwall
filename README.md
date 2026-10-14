@@ -373,8 +373,8 @@ hit and the reason behind each guard. Read the relevant part before changing tha
 area. [`CONTRIBUTING.md`](./CONTRIBUTING.md) covers the rest.
 
 **Dependencies.** `npm audit --omit=dev` reports zero vulnerabilities; keep it
-that way. Plain `npm audit` also shows two dev-tooling advisories that this repo
-can't fix yet; `CLAUDE.md` names them.
+that way. Plain `npm audit` also shows one dev-tooling advisory that this repo
+can't fix yet; `CLAUDE.md` names it.
 **Don't run `npm audit fix`:** here it proposes downgrading `next` from 16 to
 9.3.3. Upgrade forward instead with `npm outdated` and `npm install <pkg>@<version>`,
 then rerun the checks. The three `overrides` in `package.json` exist because `next`

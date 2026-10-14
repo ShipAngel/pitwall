@@ -22,7 +22,7 @@ function CycleCard({ cycle }: { cycle: CyclePoints }) {
           Cycle {cycle.number}
         </span>
         {cycle.isCurrent && (
-          <span className="inline-flex items-center rounded border border-accent-blue/30 bg-accent-blue/15 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-accent-blue">
+          <span className="inline-flex items-center rounded-sm border border-accent-blue/30 bg-accent-blue/15 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-accent-blue">
             current
           </span>
         )}
@@ -105,7 +105,7 @@ export default function CyclePointsSection({
 
 function ErrorMsg({ msg }: { msg: string }) {
   return (
-    <p className="rounded border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
+    <p className="rounded-sm border border-accent-red/30 bg-accent-red/10 p-3 text-sm text-accent-red">
       {msg}
     </p>
   );

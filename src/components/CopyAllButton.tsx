@@ -22,7 +22,7 @@ export default function CopyAllButton({ prs }: { prs: readonly { url: string }[]
       onClick={() => void copy(prListForClipboard(prs))}
       aria-label={aria}
       title={aria}
-      className={`shrink-0 rounded border px-2 py-0.5 text-xs transition ${
+      className={`shrink-0 rounded-sm border px-2 py-0.5 text-xs transition-ui ${
         copied
           ? "border-accent-green/40 bg-accent-green/10 text-accent-green"
           : "border-line bg-bg-row text-text-muted hover:border-accent-blue/40 hover:text-text-primary"

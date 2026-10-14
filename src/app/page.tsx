@@ -31,7 +31,7 @@ function ConfigError({ message }: { message: string }) {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
       <h1 className="text-lg font-semibold">Pitwall can&apos;t start yet</h1>
-      <p className="mt-4 rounded border border-line bg-bg-panel p-4 font-mono text-sm text-accent-red">
+      <p className="mt-4 rounded-sm border border-line bg-bg-panel p-4 font-mono text-sm text-accent-red">
         {message}
       </p>
       <p className="mt-4 text-sm text-text-muted">

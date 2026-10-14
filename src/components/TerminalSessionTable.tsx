@@ -59,7 +59,7 @@ export default function TerminalSessionTable({
         const canOpen = Boolean(t.pr && t.session);
         return (
           <li key={t.key}>
-            <div className="flex items-center gap-2 rounded px-1.5 py-1 text-sm transition hover:bg-bg-row">
+            <div className="flex items-center gap-2 rounded-sm px-1.5 py-1 text-sm transition-ui hover:bg-bg-row">
               {/* Opening needs the branch and title, which live on the PR and
                   not in tmux — so once a PR merges, its session can still be
                   ended but no longer attached to. A row with only a worktree
@@ -157,7 +157,7 @@ export default function TerminalSessionTable({
                   <button
                     type="button"
                     onClick={cancel}
-                    className="rounded px-1.5 py-0.5 text-xs text-text-muted transition hover:text-text-primary"
+                    className="rounded-sm px-1.5 py-0.5 text-xs text-text-muted transition-ui hover:text-text-primary"
                   >
                     Cancel
                   </button>
@@ -173,7 +173,7 @@ export default function TerminalSessionTable({
                       ? "End this session — the Claude Code running in it is lost."
                       : "Remove the worktree left behind for this PR."
                   }
-                  className="shrink-0 rounded px-1 text-text-dim transition hover:bg-bg-row hover:text-accent-red disabled:opacity-60"
+                  className="shrink-0 rounded-sm px-1 text-text-dim transition-ui hover:bg-bg-row hover:text-accent-red disabled:opacity-60"
                 >
                   {pending === t.key ? "·" : "×"}
                 </button>
@@ -218,7 +218,7 @@ function ArmedAction({
       onClick={onClick}
       disabled={disabled}
       title={title}
-      className="rounded border border-accent-red/40 bg-accent-red/15 px-1.5 py-0.5 text-xs text-accent-red transition hover:bg-accent-red/25 disabled:opacity-60"
+      className="rounded-sm border border-accent-red/40 bg-accent-red/15 px-1.5 py-0.5 text-xs text-accent-red transition-ui hover:bg-accent-red/25 disabled:opacity-60"
     >
       {label}
     </button>

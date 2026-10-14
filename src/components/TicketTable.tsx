@@ -29,7 +29,7 @@ function PRRefs({ ticket }: { ticket: LinearTicket }) {
           href={p.url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center rounded border border-accent-purple/30 bg-accent-purple/15 px-1.5 py-0.5 font-mono text-xs font-medium text-accent-purple hover:bg-accent-purple/25 hover:underline"
+          className="inline-flex items-center rounded-sm border border-accent-purple/30 bg-accent-purple/15 px-1.5 py-0.5 font-mono text-xs font-medium text-accent-purple hover:bg-accent-purple/25 hover:underline"
         >
           #{p.number}
           {p.isDraft && <span className="ml-1 text-text-muted">draft</span>}
@@ -55,7 +55,7 @@ function StatusBadge({ ticket }: { ticket: LinearTicket }) {
   const color = ticket.statusColor || "#8a93a0";
   return (
     <span
-      className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide"
+      className="inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 text-xs font-medium uppercase tracking-wide"
       style={{
         color,
         backgroundColor: `${color}22`,
