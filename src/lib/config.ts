@@ -180,7 +180,9 @@ export function validateConfig(parsed: unknown): AppConfig {
   return {
     ...c,
     refreshIntervalSeconds:
-      c.refreshIntervalSeconds ?? DEFAULT_REFRESH_INTERVAL_SECONDS,
+      c.refreshIntervalSeconds === undefined
+        ? DEFAULT_REFRESH_INTERVAL_SECONDS
+        : c.refreshIntervalSeconds,
   } as AppConfig;
 }
 

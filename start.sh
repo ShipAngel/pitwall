@@ -38,18 +38,20 @@ if [ ! -f config.json ]; then
   cp config.example.json config.json
 fi
 
-# Only the settings with no default are named: the ones you have to fill in
-# yourself. Every other setting works when absent, so a commit that adds one to
-# config.example.json changes nothing for you, and warning about it would read
-# as something broken. Copying them into your config.json was the other option,
-# but that would pin today's defaults there, and a later change to a default
-# would never reach you.
+# Only the settings with no default are named (repos, linear.teamKey): the ones
+# you have to fill in yourself. Every other setting works when absent, so a
+# commit that adds one to config.example.json changes nothing for you, and
+# warning about it would read as something broken. Copying them into your
+# config.json was the other option, but that would pin today's defaults there,
+# and a later change to a default would never reach you.
 #
 # Keep this list in step with what validateConfig requires.
 if ! MISSING_KEYS="$(node -e "
   const mine = require('./config.json');
-  const required = ['repos', 'linear'];
-  process.stdout.write(required.filter((k) => !Object.hasOwn(mine, k)).join(', '));
+  const missing = [];
+  if (!Object.hasOwn(mine, 'repos')) missing.push('repos');
+  if (!mine.linear?.teamKey) missing.push('linear.teamKey');
+  process.stdout.write(missing.join(', '));
 " 2>/dev/null)"; then
   # Reported rather than swallowed: a failed comparison and a clean one both
   # leave MISSING_KEYS empty, and a silent all-clear from a check that never ran

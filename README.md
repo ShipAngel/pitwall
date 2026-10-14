@@ -157,10 +157,10 @@ Then open **http://localhost:3737**.
 
 `start.sh` checks your Node version, syncs dependencies, creates `.env.local` and
 `config.json` from the examples if they're missing, warns if `repos` or
-`linear` is missing or a key is no longer used, and starts the server. Settings
-added by newer commits all have defaults, so there is nothing to copy across. It also starts the
-terminal server when terminals are turned on. `./start.sh prod` serves a
-production build instead.
+`linear.teamKey` is missing or a key is no longer used, and starts the server.
+It also starts the terminal server when terminals are turned on. `./start.sh
+prod` serves a production build instead. Settings added by newer commits all
+have defaults, so there is nothing to copy into your `config.json`.
 
 ### 5. Check it worked
 
