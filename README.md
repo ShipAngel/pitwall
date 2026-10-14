@@ -161,6 +161,10 @@ you're missing or no longer need, and starts the server. It also starts the
 terminal server when terminals are turned on. `./start.sh prod` serves a
 production build instead.
 
+The first start after a dependency or build config change clears Next's `.next`
+build cache, and `start.sh` refuses to start a second copy while one is already
+running.
+
 ### 5. Check it worked
 
 You should see the **Cockpit** tab with your PRs and tickets, and a **Team Pulse**
@@ -341,7 +345,8 @@ and never host Pitwall for other people. To report a vulnerability, see
 | `Terminal server is not running` | Start it with `npm run term`, or use `./start.sh`. |
 | `posix_spawnp failed.` | node-pty's helper lost its executable bit. Run `npm run postinstall`. |
 | A terminal row shows `reused` and won't delete | Working as intended: Pitwall didn't create that directory. |
-| `EADDRINUSE :3737` | Something is already on that port. `lsof -ti:3737` shows what. |
+| `EADDRINUSE :3737` | Something is already on that port. `lsof -ti:3737` shows what. `./start.sh` checks for this before starting. |
+| Unstyled page and `Cannot find module` after a pull | Next's `.next` cache is stale. `./start.sh` clears it after a dependency change; with `npm run dev`, delete `.next` and restart. |
 
 **Changed `config.json`?** Refresh. **Changed `.env.local`?** Restart.
 
