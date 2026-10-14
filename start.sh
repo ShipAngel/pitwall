@@ -124,8 +124,12 @@ fi
 # those 90 lines vanish from the lockfile, with nothing to say the app did it.
 # Installing from the lockfile is the whole job here anyway - a branch that adds
 # a dependency brings its updated lockfile along with it.
+#
+# --no-audit because the report it prints is noise here, and harmful noise: it
+# counts the one accepted dev-tooling advisory (see CLAUDE.md) as several highs
+# and suggests `npm audit fix --force`, which downgrades eslint-config-next.
 echo "→ Syncing dependencies (npm install)..."
-npm install --no-save --no-fund
+npm install --no-save --no-fund --no-audit
 
 # --- Terminals (optional) ---------------------------------------------------
 # Only started when config.json opts in. The sidecar is a separate process
