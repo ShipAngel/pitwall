@@ -14,6 +14,12 @@ const GITHUB_OWNER = /^[A-Za-z0-9-]+$/;
 const GITHUB_REPO_NAME = /^[A-Za-z0-9._-]+$/;
 
 /**
+ * Used when config.json has no `refreshIntervalSeconds`. Five minutes keeps well
+ * inside Linear's hourly rate limit.
+ */
+export const DEFAULT_REFRESH_INTERVAL_SECONDS = 300;
+
+/**
  * Refuses two repos whose GraphQL aliases would collide.
  *
  * `repoAlias` turns every non-alphanumeric into `_`, so `a-b/c` and `a/b-c` (or
@@ -109,12 +115,13 @@ export function validateConfig(parsed: unknown): AppConfig {
   }
 
   if (
-    typeof c.refreshIntervalSeconds !== "number" ||
-    !Number.isFinite(c.refreshIntervalSeconds) ||
-    c.refreshIntervalSeconds <= 0
+    c.refreshIntervalSeconds !== undefined &&
+    (typeof c.refreshIntervalSeconds !== "number" ||
+      !Number.isFinite(c.refreshIntervalSeconds) ||
+      c.refreshIntervalSeconds <= 0)
   ) {
     throw new Error(
-      "config.json: 'refreshIntervalSeconds' must be a positive number",
+      "config.json: 'refreshIntervalSeconds', if set, must be a positive number",
     );
   }
 
@@ -168,7 +175,15 @@ export function validateConfig(parsed: unknown): AppConfig {
 
   }
 
-  return c as AppConfig;
+  // Defaulted here rather than at each reader, so AppConfig keeps it a number
+  // and nothing downstream can multiply an undefined into NaN.
+  return {
+    ...c,
+    refreshIntervalSeconds:
+      c.refreshIntervalSeconds === undefined
+        ? DEFAULT_REFRESH_INTERVAL_SECONDS
+        : c.refreshIntervalSeconds,
+  } as AppConfig;
 }
 
 export async function readConfig(): Promise<AppConfig> {
