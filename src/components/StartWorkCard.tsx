@@ -94,7 +94,7 @@ export default function StartWorkCard({
         <button
           type="submit"
           disabled={!canSubmit}
-          className="rounded-sm border border-accent-blue/40 bg-accent-blue/15 px-3 py-1.5 text-sm font-medium text-accent-blue transition hover:bg-accent-blue/25 disabled:cursor-not-allowed disabled:border-line disabled:bg-bg-row disabled:text-text-dim"
+          className="rounded-sm border border-accent-blue/40 bg-accent-blue/15 px-3 py-1.5 text-sm font-medium text-accent-blue transition-ui hover:bg-accent-blue/25 disabled:cursor-not-allowed disabled:border-line disabled:bg-bg-row disabled:text-text-dim"
         >
           {pending ? "Starting…" : "Start work"}
         </button>

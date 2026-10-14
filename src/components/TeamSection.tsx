@@ -161,7 +161,7 @@ function StatusCard({
       // existing view by workflow state. The title says so rather than letting
       // the destination imply a filter that isn't applied.
       title={`${status.name}: ${formatFlowCount(status.count, status.truncated)} tickets${showPoints ? `, ${status.points} points` : ""} - opens the team's active view in Linear`}
-      className="block rounded-md border border-line bg-bg-row p-4 transition hover:border-accent-blue/50"
+      className="block rounded-md border border-line bg-bg-row p-4 transition-ui hover:border-accent-blue/50"
     >
       <div className="flex items-center gap-1.5">
         <span

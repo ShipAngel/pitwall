@@ -28,7 +28,7 @@ export default function CopyButton({
       onClick={() => void copy(url)}
       aria-label={aria}
       title={title}
-      className="shrink-0 rounded-sm p-0.5 text-text-muted transition hover:bg-bg-row hover:text-text-primary"
+      className="shrink-0 rounded-sm p-0.5 text-text-muted transition-ui hover:bg-bg-row hover:text-text-primary"
     >
       {copied ? (
         <svg

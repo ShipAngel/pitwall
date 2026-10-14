@@ -164,7 +164,7 @@ export default function RefreshHeader({
           type="button"
           onClick={onRefresh}
           disabled={loading}
-          className="rounded-sm border border-line bg-bg-panel px-3 py-1 text-sm text-text-primary transition hover:bg-bg-row disabled:opacity-50"
+          className="rounded-sm border border-line bg-bg-panel px-3 py-1 text-sm text-text-primary transition-ui hover:bg-bg-row disabled:opacity-50"
         >
           {loading ? "Refreshing…" : "Refresh"}
         </button>

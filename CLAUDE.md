@@ -85,20 +85,17 @@ and it is the only accepted finding - anything else is new:
 Tailwind is on v4, which dropped the `chokidar`, `micromatch` and
 `postcss-selector-parser` paths v3 carried.
 
-**Tailwind 4 renders the same as v3 did.** Checked by screenshotting both builds
-side by side on both tabs, as they render with live data, and diffing pixels:
-zero differences. Hover, focus, disabled, loading, error and the terminal dock
-were not screenshotted. That held only after restoring v3 behaviour v4 changed,
-all at the top of `globals.css`: in `@layer base`, border colour, placeholder
-colour, the button pointer cursor, and the browser's 1px `th`/`td` padding (v4
-zeroes all padding, which shrank the Team Pulse table's header by 1px and moved
-its columns); outside it, `hover:` applying on every device, v3's `transition`
-property list, and class scanning limited to `src/`. Remove one only after giving
-every element that relies on it an explicit utility, and re-diff.
+**Tailwind 4 renders the same as v3 did** on both tabs as they normally load
+(screenshot diff, zero pixels); hover, focus, disabled, loading, error and the
+terminal dock were not compared. The overrides that keep it that way live at the
+top of `globals.css`, each with its reason. Don't remove one without re-diffing
+screenshots of both tabs. `src/tailwindClasses.test.ts` fails on a bare
+`transition`.
 
 Theme colours and fonts live in the `@theme` block in `globals.css`; there is no
 `tailwind.config.ts` any more. `rounded` in v3 is `rounded-sm` in v4, and
-`outline-none` is `outline-hidden` - write the v4 names.
+`outline-none` is `outline-hidden` - write the v4 names. Use `transition-ui`
+rather than `transition`; `globals.css` says why.
 
 `package.json` carries three `overrides` (`postcss`, `sharp`, `minimatch`) because
 `next` and eslint pin vulnerable versions internally with no forward fix of their

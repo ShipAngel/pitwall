@@ -10,18 +10,18 @@
 @custom-variant hover (&:hover);
 
 /*
- * v3's `transition` property list. v4's also animates outline-color, so a
- * keyboard focus ring would fade in where v3 showed it at once. A plain rule in
- * the utilities layer, not `@utility`: `@utility transition` merges into the
- * built-in one and the built-in property list still wins. This comes later in
- * the same layer at the same specificity, so it overrides.
+ * Use `transition-ui`, not `transition`. It is v3's `transition`: v4's also
+ * animates outline-color, so a keyboard focus ring would fade in where v3
+ * showed it at once. A utility of its own rather than an override of
+ * `transition`, so it sorts like any other utility and variants such as
+ * `motion-reduce:transition-none` still beat it.
  */
-@layer utilities {
-  .transition {
-    transition-property: color, background-color, border-color,
-      text-decoration-color, fill, stroke, opacity, box-shadow, transform,
-      filter, backdrop-filter;
-  }
+@utility transition-ui {
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
 }
 
 @theme {
@@ -47,20 +47,20 @@
 }
 
 /*
- * Tailwind 3 defaults that Tailwind 4's preflight changed, kept so the move to
- * v4 renders pixel-identically.
+ * Tailwind 3 behaviour that Tailwind 4's preflight changed.
  *
- * - Border colour: v4 defaults to `currentcolor`; v3 used gray-200. The value is
- *   v3's hex, not `--color-gray-200`, because v4's gray-200 is an oklch colour
- *   that doesn't land on exactly the same pixel.
- * - Placeholder: v4 uses the text colour at 50%; v3 used gray-400.
+ * - Border colour: v4 defaults to `currentcolor`, a bright line on this dark
+ *   page. Every border in src sets its own colour today; this makes the
+ *   fallback the theme's `line` colour rather than v3's near-white gray-200.
  * - Buttons: v4 gives them the default cursor; v3 gave them a pointer.
  * - Table cells: v4 zeroes every element's padding, v3 left the browser's 1px
  *   on `th`/`td`. Without it the Team Pulse table's header row is 1px shorter
  *   and its columns shift by a few pixels.
+ * - The page colour on `html`, layered so it sits under utilities. It paints
+ *   overscroll and the area behind the scrollbar; <body> gets its colours from
+ *   the classes in layout.tsx.
  *
- * Dropping any of these means giving each element that relies on it an
- * explicit utility first.
+ * Dropping any of these means re-diffing screenshots of both tabs first.
  */
 @layer base {
   *,
@@ -68,13 +68,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: #e5e7eb;
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    opacity: 1;
-    color: #9ca3af;
+    border-color: var(--color-line);
   }
 
   button:not(:disabled),
@@ -87,12 +81,9 @@
     padding: 1px;
   }
 
-  /* Layered so the `bg-*`/`text-*` classes on <body> still win, as they did in
-     v3; unlayered CSS beats every utility in v4. */
-  html,
-  body {
-    background-color: #0b0d10;
-    color: #e6e9ee;
+  html {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
   }
 }
 
@@ -122,10 +113,10 @@ html {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0d10;
+  background: var(--color-bg-base);
 }
 ::-webkit-scrollbar-thumb {
-  background: #222831;
+  background: var(--color-line);
   border-radius: 6px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -157,8 +148,8 @@ html {
   }
 
   select.pitwall-select::picker(select) {
-    background-color: #13171c;      /* bg-panel */
-    border: 1px solid #222831;      /* line */
+    background-color: var(--color-bg-panel);
+    border: 1px solid var(--color-line);
     border-radius: 0.375rem;
     padding: 0.25rem;
     /* Long repo lists shouldn't run off the viewport. */
@@ -174,7 +165,7 @@ html {
     padding: 0.35rem 0.5rem;
     border-radius: 0.25rem;
     font-size: 0.875rem;
-    color: #e6e9ee;                 /* text-primary */
+    color: var(--color-text-primary);
     background-color: transparent;
   }
 
@@ -182,12 +173,12 @@ html {
      should look like pointing at a row, not like a second, different state. */
   select.pitwall-select option:hover,
   select.pitwall-select option:focus {
-    background-color: #181d23;      /* bg-row */
+    background-color: var(--color-bg-row);
     outline: none;
   }
 
   select.pitwall-select option:checked {
-    color: #58a6ff;                 /* accent-blue */
+    color: var(--color-accent-blue);
   }
 
   /* The tick sits in a fixed column so the names line up whether or not a row
@@ -195,14 +186,14 @@ html {
   select.pitwall-select option::checkmark {
     content: "✓";
     width: 1rem;
-    color: #58a6ff;                 /* accent-blue */
+    color: var(--color-accent-blue);
   }
   select.pitwall-select option:not(:checked)::checkmark {
     color: transparent;
   }
 
   select.pitwall-select::picker-icon {
-    color: #8a93a0;                 /* text-muted */
+    color: var(--color-text-muted);
     transition: transform 0.15s ease;
   }
   select.pitwall-select:open::picker-icon {
