@@ -13,6 +13,7 @@ cd "$(dirname "$0")"
 
 MODE="${1:-dev}"
 PORT=3737
+TERM_PORT=3738 # TERMINAL_PORT in src/lib/terminal.ts
 
 # --- Node version check (package requires Node 20+) -------------------------
 if ! command -v node >/dev/null 2>&1; then
@@ -31,26 +32,35 @@ fi
 # Checked before anything else, because the steps below act on a running copy's
 # files: the dependency sync and the .next clear would pull them out from under
 # it, and only then would the boot fail on the busy port. An old copy left
-# running in another terminal is the usual cause. Only the dashboard's port:
-# a running Pitwall always holds it, and the terminal port is in use only when
-# terminals are turned on.
+# running in another terminal is the usual cause. The terminal server's port is
+# checked only when terminals are turned on, so an unrelated tool on 3738 can't
+# block a dashboard that never uses it. No config.json yet means they're off.
 #
 # A connect, not a trial bind: on macOS binding 127.0.0.1 succeeds even while
-# another server holds the port on all interfaces or on ::1. Exits 1 when
-# anything answers on either loopback address.
-if ! node -e "
+# another server holds the port on all interfaces or on ::1. Prints each port
+# something answers on.
+if ! BUSY_PORTS="$(node -e "
   const net = require('net');
-  let pending = 2;
-  for (const host of ['127.0.0.1', '::1']) {
-    const sock = net.connect(${PORT}, host)
-      .once('connect', () => process.exit(1))
-      .once('error', () => { if (--pending === 0) process.exit(0); });
+  let terminals = false;
+  try { terminals = !!require('./config.json').terminals?.enabled; } catch {}
+  const ports = terminals ? [${PORT}, ${TERM_PORT}] : [${PORT}];
+  const answers = (port, host) => new Promise((resolve) => {
+    const sock = net.connect(port, host)
+      .once('connect', () => { sock.destroy(); resolve(true); })
+      .once('error', () => resolve(false));
     sock.setTimeout(1000, () => sock.destroy(new Error('timeout')));
-  }
-"; then
-  echo "✗ Port ${PORT} is already in use - Pitwall may already be running."
+  });
+  Promise.all(ports.map(async (p) =>
+    (await answers(p, '127.0.0.1')) || (await answers(p, '::1')) ? p : null,
+  )).then((r) => process.stdout.write(r.filter(Boolean).join(' and ')));
+")"; then
+  echo "⚠  Couldn't check whether Pitwall is already running."
+  BUSY_PORTS=""
+fi
+if [ -n "$BUSY_PORTS" ]; then
+  echo "✗ Something is already listening on ${BUSY_PORTS} - Pitwall may already be running."
   echo "  Stop the other copy (Ctrl-C in its terminal), or find it with:"
-  echo "    lsof -iTCP:${PORT} -sTCP:LISTEN"
+  echo "    lsof -iTCP:${PORT} -iTCP:${TERM_PORT} -sTCP:LISTEN"
   exit 1
 fi
 
@@ -190,7 +200,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 if [ "$TERMINALS_ON" = "1" ]; then
-  echo "▶ Starting terminal server on ws://127.0.0.1:3738"
+  echo "▶ Starting terminal server on ws://127.0.0.1:${TERM_PORT}"
   npm run term &
   TERM_PID=$!
 fi
