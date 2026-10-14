@@ -157,7 +157,9 @@ Then open **http://localhost:3737**.
 
 `start.sh` checks your Node version, syncs dependencies, creates `.env.local` and
 `config.json` from the examples if they're missing, warns about config keys
-you're missing or no longer need, and starts the server. It also starts the
+you're missing or no longer need, and starts the server. The first start after a
+dependency change also clears Next's `.next` build cache, and it refuses to start
+a second copy while one is already running. It also starts the
 terminal server when terminals are turned on. `./start.sh prod` serves a
 production build instead.
 
@@ -342,6 +344,7 @@ and never host Pitwall for other people. To report a vulnerability, see
 | `posix_spawnp failed.` | node-pty's helper lost its executable bit. Run `npm run postinstall`. |
 | A terminal row shows `reused` and won't delete | Working as intended: Pitwall didn't create that directory. |
 | `EADDRINUSE :3737` | Something is already on that port. `lsof -ti:3737` shows what. |
+| Unstyled page and `Cannot find module` after a pull | Next's `.next` cache is stale. `./start.sh` clears it after a dependency change; with `npm run dev`, delete `.next` and restart. |
 
 **Changed `config.json`?** Refresh. **Changed `.env.local`?** Restart.
 

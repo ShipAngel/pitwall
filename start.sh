@@ -27,6 +27,33 @@ if [ "$NODE_MAJOR" -lt 20 ]; then
   exit 1
 fi
 
+# --- Already running? -------------------------------------------------------
+# Checked before anything else, because the steps below act on a running copy's
+# files: the dependency sync and the .next clear would pull them out from under
+# it, and only then would the boot fail on the busy port. An old copy left
+# running in another terminal is the usual cause. Only the dashboard's port:
+# a running Pitwall always holds it, and the terminal port is in use only when
+# terminals are turned on.
+#
+# A connect, not a trial bind: on macOS binding 127.0.0.1 succeeds even while
+# another server holds the port on all interfaces or on ::1. Exits 1 when
+# anything answers on either loopback address.
+if ! node -e "
+  const net = require('net');
+  let pending = 2;
+  for (const host of ['127.0.0.1', '::1']) {
+    const sock = net.connect(${PORT}, host)
+      .once('connect', () => process.exit(1))
+      .once('error', () => { if (--pending === 0) process.exit(0); });
+    sock.setTimeout(1000, () => sock.destroy(new Error('timeout')));
+  }
+"; then
+  echo "✗ Port ${PORT} is already in use - Pitwall may already be running."
+  echo "  Stop the other copy (Ctrl-C in its terminal), or find it with:"
+  echo "    lsof -iTCP:${PORT} -sTCP:LISTEN"
+  exit 1
+fi
+
 # --- Config files -----------------------------------------------------------
 if [ ! -f .env.local ]; then
   echo "→ .env.local missing — creating it from the example."
@@ -126,6 +153,12 @@ fi
 # a dependency brings its updated lockfile along with it.
 echo "→ Syncing dependencies (npm install)..."
 npm install --no-save --no-fund
+
+# Next's .next cache can outlive a dependency change; see the script for why.
+if ! node scripts/clear-stale-next-cache.mjs; then
+  echo "⚠  Couldn't check whether .next needs clearing. If pages fail to build"
+  echo "   with \"Cannot find module\", delete the .next folder and start again."
+fi
 
 # --- Terminals (optional) ---------------------------------------------------
 # Only started when config.json opts in. The sidecar is a separate process
