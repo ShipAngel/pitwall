@@ -15,15 +15,19 @@ MODE="${1:-dev}"
 PORT=3737
 TERM_PORT=3738 # TERMINAL_PORT in src/lib/terminal.ts
 
-# --- Node version check (package requires Node 20+) -------------------------
+# --- Node version check (package requires Node 22.23.4+) --------------------
+# The full version is compared, not just the major: 22.23.4 is the first 22.x
+# with the October 2026 security fixes, so an older 22 must be refused too.
 if ! command -v node >/dev/null 2>&1; then
-  echo "✗ Node.js is not installed. Install Node 20+ (see .nvmrc) and retry."
+  echo "✗ Node.js is not installed. Install Node 22.23.4+ (see .nvmrc) and retry."
   exit 1
 fi
 
-NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
-if [ "$NODE_MAJOR" -lt 20 ]; then
-  echo "✗ Node $(node --version) found, but Node 20+ is required."
+if ! node -e '
+  const [a, b, c] = process.versions.node.split(".").map(Number);
+  process.exit(a > 22 || (a === 22 && (b > 23 || (b === 23 && c >= 4))) ? 0 : 1);
+'; then
+  echo "✗ Node $(node --version) found, but Node 22.23.4+ is required."
   echo "  If you use nvm:  nvm use"
   exit 1
 fi
@@ -158,7 +162,7 @@ fi
 # whatever your local npm emits, so the working tree is dirty every single time.
 # The concrete case: Dependabot runs npm 11, which records a "libc" field on the
 # 30 optional linux/win binary packages (sharp, @next/swc, @rolldown,
-# lightningcss); .nvmrc pins Node 20, whose npm 10 drops it. Boot the app and
+# lightningcss); .nvmrc pins Node 22, whose npm 10 drops it. Boot the app and
 # those 90 lines vanish from the lockfile, with nothing to say the app did it.
 # Installing from the lockfile is the whole job here anyway - a branch that adds
 # a dependency brings its updated lockfile along with it.
