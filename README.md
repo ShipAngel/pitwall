@@ -61,7 +61,7 @@ cleaning one up can end its session and remove the worktree Pitwall made for it.
 | You need | For |
 |---|---|
 | **macOS** | Everything. The session scanner uses `ps`, `lsof` and AppleScript. |
-| **Node 20+** | Running Pitwall. `.nvmrc` pins the version. |
+| **Node 22.23.4+** | Running Pitwall. `.nvmrc` pins the version. |
 | **A GitHub token** | Every GitHub panel, and Start Work. github.com only; GitHub Enterprise Server isn't supported. |
 | **A Linear API key** | Every Linear panel, and Start Work. |
 | **iTerm2** | Focusing Claude Code sessions. Other terminals are listed but can't be focused. |
