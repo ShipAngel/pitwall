@@ -15,19 +15,20 @@ MODE="${1:-dev}"
 PORT=3737
 TERM_PORT=3738 # TERMINAL_PORT in src/lib/terminal.ts
 
-# --- Node version check (package requires Node 22.23.4+) --------------------
-# The full version is compared, not just the major: 22.23.4 is the first 22.x
-# with the October 2026 security fixes, so an older 22 must be refused too.
+# --- Node version check (package requires Node 24.22.3+) --------------------
+# The full version is compared, not just the major: 24.22.3 is the 24.x release
+# with the November 2026 security fixes, so an older 24 must be refused too.
+# Node 24 is also what ships npm 11, the npm the lockfile is written with.
 if ! command -v node >/dev/null 2>&1; then
-  echo "✗ Node.js is not installed. Install Node 22.23.4+ (see .nvmrc) and retry."
+  echo "✗ Node.js is not installed. Install Node 24.22.3+ (see .nvmrc) and retry."
   exit 1
 fi
 
 if ! node -e '
   const [a, b, c] = process.versions.node.split(".").map(Number);
-  process.exit(a > 22 || (a === 22 && (b > 23 || (b === 23 && c >= 4))) ? 0 : 1);
+  process.exit(a > 24 || (a === 24 && (b > 22 || (b === 22 && c >= 3))) ? 0 : 1);
 '; then
-  echo "✗ Node $(node --version) found, but Node 22.23.4+ is required."
+  echo "✗ Node $(node --version) found, but Node 24.22.3+ is required."
   echo "  If you use nvm:  nvm use"
   exit 1
 fi
@@ -160,10 +161,13 @@ fi
 # --no-save is load-bearing: it installs what the lockfile says and never writes
 # it back. Without it, booting the dashboard rewrites package-lock.json to
 # whatever your local npm emits, so the working tree is dirty every single time.
-# The concrete case: Dependabot runs npm 11, which records a "libc" field on the
-# 30 optional linux/win binary packages (sharp, @next/swc, @rolldown,
-# lightningcss); .nvmrc pins Node 22, whose npm 10 drops it. Boot the app and
-# those 90 lines vanish from the lockfile, with nothing to say the app did it.
+# The case that prompted it: Dependabot runs npm 11, which records a "libc"
+# field on the 30 optional linux/win binary packages (sharp, @next/swc,
+# @rolldown, lightningcss), and npm 10 drops it. .nvmrc used to pin Node 22,
+# whose npm is 10, so booting the app made those 90 lines vanish from the
+# lockfile with nothing to say the app did it. .nvmrc now pins Node 24, whose
+# npm is 11, but the version check above lets a newer Node through and its npm
+# may format the lockfile differently again.
 # Installing from the lockfile is the whole job here anyway - a branch that adds
 # a dependency brings its updated lockfile along with it.
 #

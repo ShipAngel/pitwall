@@ -109,10 +109,12 @@ The `sharp` override's floor, `0.35.5`, is the release that patched a librsvg
 CVE while `next` still accepted `0.35.4`. It can go once `next`'s own range
 starts at `0.35.5` or later.
 
-The lockfile is written by npm 11. npm 10 strips the `libc` constraints on the
+The lockfile is written by npm 11, which is the npm Node 24 ships and why
+`.nvmrc` pins Node 24. npm 10 (Node 22) strips the `libc` constraints on the
 Linux builds of `next`'s SWC binary and `sharp`, so a lockfile touched with npm
 10 shows a large unexplained diff and installs both glibc and musl binaries on
-Linux. Check `npm -v` before committing it.
+Linux. On the pinned Node a plain `npm install` leaves the lockfile alone; if it
+does not, check `node -v` and `npm -v` before committing it.
 
 The `minimatch` override is load-bearing: it is what keeps `brace-expansion` on
 `5.0.8` or later, the first patched release. Override the **consumer**, never the leaf — forcing
