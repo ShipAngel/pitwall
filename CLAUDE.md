@@ -72,18 +72,17 @@ back to the last release predating each advisory. Run once, it took findings fro
 Upgrade forward instead: `npm outdated`, then `npm install <pkg>@<version>`, then
 re-audit and run the full gate.
 
-`npm audit --omit=dev` reports **0 vulnerabilities**. Keep it there. Plain
-`npm audit` also reports one dev-tooling advisory with no fix this repo can take,
-and it is the only accepted finding - anything else is new:
+`npm audit` and `npm audit --omit=dev` both report **0 vulnerabilities**. Keep
+them there. There is no accepted finding, so anything audit reports is new.
 
-- `braces` [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)
-  has no patched release of `braces` itself. It arrives only through
-  `eslint-config-next` → `@next/eslint-plugin-next` → `fast-glob` →
-  `micromatch`; each package on that path is reported separately, which is why
-  one advisory shows up as several highs. `npm audit` lists a "fix" for it: a
-  major downgrade of `eslint-config-next` (to 14.2.35 when written), the same
-  trap as above. Don't take it. It is a
-  denial-of-service bug reachable only by handing lint a hostile glob pattern.
+There used to be one: `braces`
+[GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), which
+arrived through `eslint-config-next` → `@next/eslint-plugin-next` → `fast-glob`
+→ `micromatch` and had no patched release. GitHub withdrew that advisory on
+2026-10-23 and audit stopped reporting it. `braces` 3.0.3 is still in the
+lockfile on that path. If an advisory on it comes back, the "fix" audit offers
+is a major downgrade of `eslint-config-next`, the same trap as above. Don't take
+it.
 
 Tailwind is on v4, which dropped the `chokidar`, `micromatch` and
 `postcss-selector-parser` paths v3 carried.
