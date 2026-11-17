@@ -167,9 +167,9 @@ fi
 # Installing from the lockfile is the whole job here anyway - a branch that adds
 # a dependency brings its updated lockfile along with it.
 #
-# --no-audit because the report it prints is noise here, and harmful noise: it
-# counts the one accepted dev-tooling advisory (see CLAUDE.md) as several highs
-# and suggests `npm audit fix --force`, which downgrades eslint-config-next.
+# --no-audit because a report printed at boot is noise here, and harmful noise:
+# when it has a finding it suggests `npm audit fix`, which in this repo
+# downgrades next and eslint-config-next (see CLAUDE.md).
 echo "→ Syncing dependencies (npm install)..."
 npm install --no-save --no-fund --no-audit
 
