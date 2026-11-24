@@ -99,6 +99,12 @@ Theme colours and fonts live in the `@theme` block in `globals.css`; there is no
 `outline-none` is `outline-hidden` - write the v4 names. Use `transition-ui`
 rather than `transition`; `globals.css` says why.
 
+**Install scripts are allow-listed** in `allowScripts` in `package.json` (npm 11.19+
+skips any script not listed and warns on every install). `node-pty` is approved, pinned
+to its version; `esbuild`, `fsevents` and `unrs-resolver` are denied because their
+prebuilt binaries work without the script. Bumping `node-pty` brings the warning back:
+run `npm install-scripts approve node-pty` and commit the new entry.
+
 `package.json` carries three `overrides` (`postcss`, `sharp`, `minimatch`) because
 `next` and eslint pin vulnerable versions internally with no forward fix of their
 own. Verify any change to them with a real build and boot, not just `npm audit`.
