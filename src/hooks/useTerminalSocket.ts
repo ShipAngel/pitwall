@@ -50,7 +50,7 @@ const THEME = {
 
 export type TerminalSocket = {
   /** Attach to the element the terminal should render into. */
-  hostRef: React.RefObject<HTMLDivElement>;
+  hostRef: React.RefObject<HTMLDivElement | null>;
   status: TerminalStatus;
   reconnect: () => void;
 };
